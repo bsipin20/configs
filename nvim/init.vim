@@ -47,6 +47,7 @@ Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'nvim-orgmode/orgmode'
+Plug 'hashivim/vim-terraform'
 
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
@@ -69,6 +70,7 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+" copilot
 " Define mappings while in 'filter' mode
 "   <C-o>         - Switch to normal mode inside of search results
 "   <Esc>         - Exit denite window in any mode
@@ -182,6 +184,8 @@ lua << EOF
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+-- github copilot
 
 vim.opt.termguicolors = true
 
@@ -336,6 +340,12 @@ end, { noremap = true, silent = true })
 
 end
 
+vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+	expr = true,
+   	replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
+
 require'nvim-tree'.setup{
   on_attach = on_attach,
   git = {
@@ -359,12 +369,4 @@ require'nvim-tree'.setup{
   view = {
   }
 }
--- Load custom tree-sitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
-
-require('orgmode').setup({
-  org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
-  org_default_notes_file = '~/Dropbox/org/refile.org',
-})
-
 EOF
